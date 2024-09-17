@@ -7,7 +7,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.bluetooth.le.ScanFilter;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
@@ -103,13 +102,11 @@ public class BeaconsAndroidModule extends ReactContextBaseJavaModule implements 
                 PendingIntent pendingIntent = PendingIntent.getActivity(mApplicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                 builder.setContentIntent(pendingIntent);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-                    channel.setDescription(CHANNEL_DESCRIPTION);
-                    NotificationManager notificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.createNotificationChannel(channel);
-                    builder.setChannelId(channel.getId());
-                }
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+                channel.setDescription(CHANNEL_DESCRIPTION);
+                NotificationManager notificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.createNotificationChannel(channel);
+                builder.setChannelId(channel.getId());
 
                 mBeaconManager.enableForegroundServiceScanning(builder.build(), 456);
                 // For the above foreground scanning service to be useful, you need to disable
@@ -544,8 +541,6 @@ public class BeaconsAndroidModule extends ReactContextBaseJavaModule implements 
     }
 
     private void checkOrCreateChannel(NotificationManager manager) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-            return;
         if (channelCreated)
             return;
         if (manager == null)

@@ -1,4 +1,6 @@
-declare module 'react-native-beacons-manager' {
+import { DeviceEventEmitterStatic, NativeEventEmitter } from "react-native";
+
+declare module '@hkpuits/react-native-beacons-manager' {
 
   export interface BeaconRegion {
     identifier: string,
@@ -93,6 +95,7 @@ declare module 'react-native-beacons-manager' {
     ///////////////////////////////////////////////////////
     // common iOS and Android
     ///////////////////////////////////////////////////////
+    BeaconsEventEmitter: DeviceEventEmitterStatic | NativeEventEmitter;
 
     startMonitoringForRegion(
       region: BeaconRegion
@@ -141,6 +144,10 @@ declare module 'react-native-beacons-manager' {
         uuid?: string
       }
     ): Promise<any>;
+
+    /** ANDROID ONLY */
+    init(): Promise<any>;
+    stop(): Promise<any>;
   }
 
   const beacons: Beacons;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import androidx.annotation.Nullable;
+
 import android.util.Log;
 
 import com.facebook.react.HeadlessJsTaskService;
@@ -21,26 +22,25 @@ public class BeaconsAndroidTransitionService extends HeadlessJsTaskService {
     public void onCreate() {
         super.onCreate();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Context mContext = this.getApplicationContext();
-            Resources res = mContext.getResources();
-            String packageName = mContext.getPackageName();
-            String CHANNEL_ID = "rn-push-notification-channel-id";
-            String CHANNEL_NAME = res.getString(res.getIdentifier("notification_channel_name", "string", packageName));
-            String CHANNEL_DESCRIPTION = res.getString(res.getIdentifier("notification_channel_description", "string", packageName));
+        Context mContext = this.getApplicationContext();
+        Resources res = mContext.getResources();
+        String packageName = mContext.getPackageName();
+        String CHANNEL_ID = "rn-push-notification-channel-id";
+        String CHANNEL_NAME = res.getString(res.getIdentifier("notification_channel_name", "string", packageName));
+        String CHANNEL_DESCRIPTION = res.getString(res.getIdentifier("notification_channel_description", "string", packageName));
 
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-            channel.setDescription(CHANNEL_DESCRIPTION);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+        channel.setDescription(CHANNEL_DESCRIPTION);
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
-            Notification notification =
-                    new Notification.Builder(mContext, CHANNEL_ID)
-                            .setContentTitle("")
-                            .setContentText("")
-                            .setSmallIcon(res.getIdentifier("ic_notification", "mipmap", packageName))
-                            .build();
-            startForeground(2, notification);
-        }
+        Notification notification =
+                new Notification.Builder(mContext, CHANNEL_ID)
+                        .setContentTitle("")
+                        .setContentText("")
+                        .setSmallIcon(res.getIdentifier("ic_notification", "mipmap", packageName))
+                        .build();
+        
+        startForeground(2, notification);
     }
 
     @Override
