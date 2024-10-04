@@ -1,3 +1,10 @@
+## 1.3.4
+- update to use FOREGROUND_SERVICE_REMOTE_MESSAGING
+- fix start foreground when device reboot
+
+## 1.3.3
+- Update to support Android Sdk Version 34+
+
 ## 1.2.8
 - Update to support Android Sdk Version 31+
 

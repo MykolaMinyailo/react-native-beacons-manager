@@ -1,5 +1,6 @@
 package com.mackentoch.beaconsandroid;
 
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import androidx.annotation.Nullable;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.facebook.react.HeadlessJsTaskService;
@@ -39,8 +41,16 @@ public class BeaconsAndroidTransitionService extends HeadlessJsTaskService {
                         .setContentText("")
                         .setSmallIcon(res.getIdentifier("ic_notification", "mipmap", packageName))
                         .build();
-        
-        startForeground(2, notification);
+
+        try {
+            startForeground(2, notification);
+        } catch (Exception e) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (e instanceof ForegroundServiceStartNotAllowedException || e instanceof SecurityException)) {
+                Log.d(LOG_TAG, "BeaconsAndroidTransitionService skip Error: ForegroundServiceStartNotAllowedException or SecurityException");
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
